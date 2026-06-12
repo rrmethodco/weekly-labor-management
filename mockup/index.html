@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Weekly Labor Management — Design Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@400;500;600&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#f7f8fc; --card:#ffffff; --card-alt:#f4f7fd;
+  --border:#e2e8f4; --divider:#edf0f7;
+  --text:#0f1b2d; --text-2:#4a5568; --text-3:#8a9ab0;
+  --accent:#2563b0; --accent-bright:#4187d4; --accent-light:#eff6ff; --alert:#ea580c;
+  --hero:#0c1526; --hero-text:#e2eaf6; --hero-dim:#8aa5c4; --hero-faint:#4a6480;
+}
+.report.dark{
+  --canvas:#0c1526; --card:#111d30; --card-alt:#162035;
+  --border:#1e3050; --divider:#162035;
+  --text:#e2eaf6; --text-2:#8aa5c4; --text-3:#4a6480;
+  --accent:#4187d4; --accent-light:#162035; --alert:#fb923c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--canvas);color:var(--text);font-family:'Inter','DM Sans',sans-serif;font-size:13.5px;line-height:1.6;transition:background .2s}
+.wrap{max-width:1100px;margin:0 auto;padding:26px 22px 80px}
+.hero{background:var(--hero);color:var(--hero-text);border-radius:14px;padding:34px 40px;position:relative;overflow:hidden}
+.hero .edge{position:absolute;left:8px;top:40px;writing-mode:vertical-rl;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.3em;color:var(--hero-faint)}
+.hero .crumb{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-bright);margin-bottom:14px}
+.hero h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:48px;line-height:1.0;letter-spacing:-.01em}
+.hero h1 em{font-style:italic;font-weight:400;color:#7a9dc4}
+.hero .lede{font-style:italic;color:rgba(255,255,255,.65);margin-top:12px;max-width:760px}
+.hero .lede strong{color:rgba(255,255,255,.92)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.meta-chip{border:1px solid rgba(226,234,246,.18);border-radius:5px;padding:5px 9px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--hero-dim)}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 30px;flex-wrap:wrap}
+.toolbar .label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
+.btn{font-family:'DM Sans',sans-serif;font-weight:500;font-size:12px;height:28px;padding:0 10px;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);text-decoration:none;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+select.ctl{font-family:'DM Sans',sans-serif;font-weight:500;font-size:12px;height:28px;padding:0 8px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);cursor:pointer}
+section{margin-bottom:46px}
+.eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-bright);margin-bottom:6px}
+h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:28px;margin-bottom:6px}
+h2 em{font-style:italic;color:#6d84ad}
+.hint{font-size:12px;color:var(--text-2);max-width:780px;margin-bottom:14px}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.panel + .panel{margin-top:14px}
+.panel-head{padding:14px 16px 6px}
+.panel-head .ttl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18px}
+.panel-head .sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-family:'DM Mono',monospace;font-weight:400;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);text-align:right;padding:8px 12px;border-bottom:1px solid var(--divider);white-space:nowrap}
+th:first-child,th.l{text-align:left}
+td{font-family:'DM Sans',sans-serif;font-weight:600;font-size:12px;color:var(--text);text-align:right;padding:8px 12px;border-bottom:1px solid var(--divider);font-variant-numeric:tabular-nums;white-space:nowrap}
+td:first-child{font-weight:400;color:var(--text-2);text-align:left}
+tr:last-child td{border-bottom:0}
+tr.rowlink{cursor:pointer}
+tr.rowlink:hover td{background:rgba(37,99,176,.05)}
+td .sub{display:block;font-weight:400;font-size:10.5px;color:var(--text-3)}
+.delta{color:var(--accent);font-weight:600}
+.alert{color:var(--alert);font-weight:600}
+.muted{color:var(--text-3);font-weight:400}
+.badge{display:inline-block;font-family:'DM Sans',sans-serif;font-weight:500;font-size:11px;padding:2px 8px;border:1px solid var(--border);border-radius:6px;color:var(--text)}
+.badge.done{background:var(--accent);border-color:var(--accent);color:#fff}
+.badge.warn{border-color:var(--alert);color:var(--alert)}
+.badge.dim{color:var(--text-3)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.kpi .label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
+.kpi .value{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:28px;line-height:1.15;color:#445e7e}
+.report.dark .kpi .value{color:#8aa5c4}
+.kpi .value.alert{color:var(--alert)}
+.kpi .sub{font-size:11px;color:var(--text-3)}
+.kpi .deltachip{font-family:'Inter',sans-serif;font-weight:700;font-size:12px;color:var(--accent)}
+.stepper{display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card);margin-bottom:14px;flex-wrap:wrap}
+.step{flex:1;min-width:120px;padding:12px 10px;text-align:center;border-right:1px solid var(--divider)}
+.step:last-child{border-right:0}
+.step .mo{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)}
+.step .state{font-size:11px;color:var(--text-2);margin-top:2px}
+.step .who{font-family:'DM Sans',sans-serif;font-weight:600;font-size:10.5px;color:var(--accent);margin-top:2px}
+.step.done .state{color:var(--accent);font-weight:600}
+.step.active{background:var(--accent-light);box-shadow:inset 0 0 0 1px var(--accent)}
+.action{border:1px dashed var(--border);border-radius:10px;padding:16px;margin:12px 16px 16px}
+.action .label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.action p{font-size:12px;color:var(--text-2);margin-bottom:10px}
+.formrow{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.field .flabel{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px}
+.field input,.field textarea{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--text);background:var(--card-alt);border:1px solid var(--border);border-radius:6px;height:30px;padding:0 10px;width:130px}
+.field textarea{width:280px;height:30px;padding:6px 10px;font-weight:400;resize:none}
+.sugg{padding:4px 16px 14px}
+.sugg p{font-size:12px;margin:6px 0;color:var(--text-2)}
+.sugg p.alert{color:var(--alert);font-weight:500}
+.note{font-size:11px;color:var(--text-3);font-style:italic;padding:0 16px 14px}
+.vgood{color:#059669;font-weight:600}.vbad{color:#dc2626;font-weight:600}
+.report.dark .vgood{color:#34d399}.report.dark .vbad{color:#f87171}
+tr.grp td{background:var(--card-alt);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-2);padding:5px 12px}
+.stamp{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-top:30px}
+</style>
+</head>
+<body>
+<div class="report" id="report-root">
+<div class="wrap">
+
+  <div class="hero">
+    <div class="edge">WEEKLY LABOR MANAGEMENT WORKFLOW · MOCKUP</div>
+    <div class="crumb">PERFORMANCE / F&amp;B / LABOR MANAGEMENT</div>
+    <h1 id="hero-title">Weekly Labor <em>Management</em></h1>
+    <p class="lede" id="hero-lede"></p>
+    <div class="chips">
+      <span class="meta-chip">WEEK OF JUN 8 – JUN 14, 2026</span>
+      <span class="meta-chip">PERIOD 6 · WEEK 4 · FY 2026</span>
+      <span class="meta-chip" id="scope-chip">ALL LOCATIONS</span>
+      <span class="meta-chip">LIVE · 2026-06-11T09:30:00Z</span>
+      <span class="meta-chip">MOCKUP · SAMPLE DATA</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <a class="btn" href="#">‹ Prev week</a>
+      <span class="label">P6 W4 · 2026-06-08 → 2026-06-14</span>
+      <a class="btn" href="#">Next week ›</a>
+      <span class="label" style="margin-left:10px">VIEW</span>
+      <select class="ctl" id="outlet-filter">
+        <option value="all">All locations</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" id="theme-toggle" type="button">Dark mode</button>
+      <button class="btn primary" type="button">⤴ Share live link</button>
+    </div>
+  </div>
+
+  <div id="content"></div>
+
+  <div class="stamp">Leonardo · Weekly Labor Management Workflow · design mockup · sample data only · Jun 11, 2026</div>
+</div>
+</div>
+
+<script>
+/* ============================ SAMPLE DATA ============================ */
+/* week: Mon Jun 8 – Sun Jun 14; "today" = Thu Jun 11 -> 3 elapsed days  */
+const DAY_LABELS = ["Mon 6/8","Tue 6/9","Wed 6/10","Thu 6/11","Fri 6/12","Sat 6/13","Sun 6/14"];
+const STEPS = ["Forecast Set & Submitted","Labor Targets Returned","Schedule Built by Person","Request Approval","Schedule Approved","Schedule Published"];
+const STEP_HINTS = ["GM + Directors · Helixo","Ross · FOH/BOH $","GM · TeamWork","GM · scheduled $","Ross","GM · TeamWork"];
+const STEP_WHEN = ["Mon 10:00 AM","Mon EOD*","Tue*","Tue*","Wed*","Wed*"];
+const STATUS_STEPS = {NOT_STARTED:0,DRAFT:0,SUBMITTED:1,TARGETS_ISSUED:2,APPROVAL_REQUESTED:4,APPROVED:5,PUBLISHED:6};
+const STATUS_LABEL = {NOT_STARTED:"Not started",DRAFT:"Forecast due",SUBMITTED:"Awaiting targets (Ross)",
+  TARGETS_ISSUED:"Schedule due (TeamWork)",APPROVAL_REQUESTED:"Awaiting approval (Ross)",
+  APPROVED:"Approved — publish",PUBLISHED:"Published"};
+const BADGE_CLS = {PUBLISHED:"badge done",APPROVED:"badge done",SUBMITTED:"badge warn",APPROVAL_REQUESTED:"badge warn",NOT_STARTED:"badge dim"};
+
+const OUTLETS = [
+  { key:"lowland", name:"Lowland", city:"Charleston", status:"PUBLISHED",
+    stamps:["GM+Dir · Mon 10:00a","Ross · Mon 3:50p","TeamWork · Tue","GM · Tue 4:45p","Ross · Wed 9:10a","GM · Wed 9:22a"],
+    rev:{bud:84000,fcst:91000}, foh:{bud:12600,hx:12740,gd:12000,sc:11850}, boh:{bud:9800,hx:9560,gd:9000,sc:9120},
+    note:"Holding FOH under budget on higher revenue — patio coverage stays; trim Mon/Tue host hours. BOH gets one extra prep shift Friday for the Saturday push.",
+    fcstDays:[10200,10800,11600,12400,15200,16800,14000],
+    actDays:[{rev:9850,foh:1580,boh:1260},{rev:11240,foh:1610,boh:1280},{rev:11925,foh:1700,boh:1300}] },
+  { key:"lesupreme", name:"Le Supreme", city:"Wilmington", status:"TARGETS_ISSUED",
+    stamps:["GM+Dir · Mon 10:00a","Ross · Mon 5:05p"],
+    rev:{bud:112000,fcst:118000}, foh:{bud:16800,hx:17000,gd:16200,sc:null}, boh:{bud:13400,hx:13100,gd:12900,sc:null},
+    note:"Brunch volume is carrying the week — protect weekend brunch FOH, pull one weekday lunch server.",
+    fcstDays:[13200,14100,15400,16300,19800,21400,17800],
+    actDays:[{rev:12890,foh:2120,boh:1690},{rev:14750,foh:2180,boh:1720},{rev:15100,foh:2240,boh:1750}] },
+  { key:"mulherins", name:"Mulherin's", city:"Philadelphia", status:"SUBMITTED",
+    stamps:["GM+Dir · Mon 10:05a"],
+    rev:{bud:73000,fcst:70800}, foh:{bud:10950,hx:10620,gd:null,sc:null}, boh:{bud:8750,hx:8500,gd:null,sc:null},
+    note:null,
+    fcstDays:[8100,8500,9200,9800,12400,13200,9600],
+    actDays:[{rev:8310,foh:1420,boh:1150},{rev:8270,foh:1450,boh:1160},{rev:9150,foh:1495,boh:1185}] },
+  { key:"kamper", name:"Kamper", city:"Detroit", status:"APPROVAL_REQUESTED",
+    stamps:["GM+Dir · Mon 10:00a","Ross · Mon 4:10p","Dolce · Tue","GM · Tue 5:02p"],
+    rev:{bud:61000,fcst:58500}, foh:{bud:9150,hx:8900,gd:8600,sc:8720}, boh:{bud:7300,hx:7050,gd:6900,sc:6840},
+    note:"Soft midweek — schedule to the lower forecast, not budget. Keep Saturday line fully staffed.",
+    fcstDays:[6700,6900,7400,8100,10300,11200,7900],
+    actDays:[{rev:6540,foh:1180,boh:940},{rev:7110,foh:1210,boh:955},{rev:7260,foh:1240,boh:975}] },
+  { key:"hirokisan", name:"Hiroki-San", city:"Detroit", status:"APPROVED",
+    stamps:["GM+Dir · Mon 10:00a","Ross · Mon 4:15p","TeamWork · Tue","GM · Tue 3:10p","Ross · Wed 9:05a"],
+    rev:{bud:47500,fcst:51200}, foh:{bud:7100,hx:7290,gd:7100,sc:7050}, boh:{bud:6200,hx:6030,gd:5900,sc:5950},
+    note:"Omakase counter full Fri/Sat — protect those shifts, trim lunch support.",
+    fcstDays:[5700,5900,6400,7100,9200,9900,7000],
+    actDays:[{rev:5820,foh:980,boh:850},{rev:6090,foh:1010,boh:870},{rev:6310,foh:1030,boh:880}] },
+  { key:"barrotunda", name:"Bar Rotunda", city:"Wilmington", status:"NOT_STARTED",
+    stamps:[],
+    rev:{bud:38000,fcst:38900}, foh:{bud:5700,hx:5830,gd:null,sc:null}, boh:{bud:4750,hx:4640,gd:null,sc:null},
+    note:null,
+    fcstDays:[4300,4500,4900,5400,7000,7600,5200],
+    actDays:[{rev:4150,foh:760,boh:620},{rev:4690,foh:780,boh:640},{rev:4820,foh:800,boh:650}] },
+];
+
+/* ============================ HELPERS ============================ */
+const usd = (v,sign) => v==null ? "—" : (sign&&v>0?"+":v<0?"−":"") + "$" + Math.abs(Math.round(v)).toLocaleString("en-US");
+const pct = (v,sign) => v==null ? "—" : (sign&&v>0?"+":v<0?"−":"") + (Math.abs(v)*100).toFixed(1) + "%";
+const deltaCell = (val,base) => (val==null||base==null) ? '<span class="muted">—</span>'
+  : `<span class="delta">${usd(val-base,true)} (${pct(base? (val-base)/base : null,true)})</span>`;
+const sum = a => a.reduce((x,y)=>x+y,0);
+
+function calc(o){
+  const weekFcst = sum(o.fcstDays);
+  const wtdAct = sum(o.actDays.map(d=>d.rev));
+  const wtdFcst = sum(o.fcstDays.slice(0,3));
+  const wtdFoh = sum(o.actDays.map(d=>d.foh)), wtdBoh = sum(o.actDays.map(d=>d.boh));
+  const wtdLabor = wtdFoh + wtdBoh;
+  const remDays = 4;
+  const reqPerDay = (weekFcst - wtdAct)/remDays;
+  const fcstRemPerDay = (weekFcst - wtdFcst)/remDays;
+  const gdTotal = (o.foh.gd!=null && o.boh.gd!=null) ? o.foh.gd + o.boh.gd : null;
+  const targetPct = gdTotal!=null ? gdTotal/weekFcst : null;
+  const laborRem = gdTotal!=null ? gdTotal - wtdLabor : null;
+  return {weekFcst,wtdAct,wtdFcst,wtdFoh,wtdBoh,wtdLabor,remDays,reqPerDay,fcstRemPerDay,gdTotal,targetPct,laborRem,
+    wtdLaborPct: wtdLabor/wtdAct,
+    fohRem: o.foh.gd!=null ? o.foh.gd - wtdFoh : null,
+    bohRem: o.boh.gd!=null ? o.boh.gd - wtdBoh : null};
+}
+
+function suggestions(o,c){
+  const out = [];
+  if (c.reqPerDay > c.fcstRemPerDay*1.005)
+    out.push({a:true,t:`Revenue is ${usd(c.wtdFcst-c.wtdAct)} behind Target pace — the remaining ${c.remDays} days must average ${usd(c.reqPerDay)}/day (Target calls for ${usd(c.fcstRemPerDay)}/day) to land the week at ${usd(c.weekFcst)}.`});
+  else
+    out.push({a:false,t:`Revenue is on/ahead of Target pace — hold ${usd(Math.max(c.reqPerDay,0))}/day across the remaining ${c.remDays} days to close the week at ${usd(c.weekFcst)}.`});
+  if (c.gdTotal!=null){
+    if (c.wtdLaborPct > c.targetPct + .005){
+      const over = c.wtdLabor - c.targetPct*c.wtdAct;
+      out.push({a:true,t:`Labor is running ${pct(c.wtdLaborPct)} vs the ${pct(c.targetPct)} allowable — about ${usd(over)} hot. Trim roughly ${usd(over/c.remDays)}/day from upcoming shifts to finish inside the ${usd(c.gdTotal)} allowance.`});
+    } else {
+      out.push({a:false,t:`Labor is pacing at ${pct(c.wtdLaborPct)} against a ${pct(c.targetPct)} allowable — ${usd(c.laborRem)} remains for the final ${c.remDays} days (≈ ${usd(c.laborRem/c.remDays)}/day).`});
+    }
+    if (c.fohRem!=null && c.fohRem<0) out.push({a:true,t:`FOH has exceeded its ${usd(o.foh.gd)} allowance by ${usd(-c.fohRem)} — cut FOH shifts before BOH.`});
+    if (c.bohRem!=null && c.bohRem<0) out.push({a:true,t:`BOH has exceeded its ${usd(o.boh.gd)} allowance by ${usd(-c.bohRem)} — review prep/dish coverage on the remaining days.`});
+  } else {
+    out.push({a:true,t:`No approved labor guidance is on file for this week — moving labor targets are unavailable until the forecast scorecard is approved.`});
+  }
+  return out;
+}
+
+/* ============================ RENDERERS ============================ */
+function badge(o){ return `<span class="${BADGE_CLS[o.status]||'badge'}">${STATUS_LABEL[o.status]}</span>`; }
+
+function pipelineRow(o, clickable){
+  const fcstShown = o.status==="NOT_STARTED" ? null : o.rev.fcst;
+  /* % of revenue uses the Scheduled $ when entered, else the Target $, over Target revenue */
+  const grpPct = g => g.sc!=null ? g.sc/o.rev.fcst : g.gd!=null ? g.gd/o.rev.fcst : null;
+  const fohPct = grpPct(o.foh), bohPct = grpPct(o.boh);
+  const totPct = (fohPct!=null&&bohPct!=null) ? fohPct+bohPct : null;
+  return `<tr class="${clickable?'rowlink':''}" ${clickable?`onclick="setView('${o.key}')"`:""}>
+    <td>${o.name}<span class="sub">${o.city}</span></td>
+    <td style="text-align:left">${badge(o)}</td>
+    <td>${usd(o.rev.bud)}</td>
+    <td>${fcstShown!=null?usd(fcstShown):`<span class="muted">${usd(o.rev.fcst)}*</span>`}</td>
+    <td>${fcstShown!=null?deltaCell(o.rev.fcst,o.rev.bud):'<span class="muted">—</span>'}</td>
+    <td>${o.foh.gd!=null?usd(o.foh.gd):'<span class="muted">—</span>'}</td><td>${o.foh.sc!=null?usd(o.foh.sc):'<span class="muted">—</span>'}</td>
+    <td>${fohPct!=null?pct(fohPct):'<span class="muted">—</span>'}</td>
+    <td>${o.boh.gd!=null?usd(o.boh.gd):'<span class="muted">—</span>'}</td><td>${o.boh.sc!=null?usd(o.boh.sc):'<span class="muted">—</span>'}</td>
+    <td>${bohPct!=null?pct(bohPct):'<span class="muted">—</span>'}</td>
+    <td>${totPct!=null?pct(totPct):'<span class="muted">—</span>'}</td></tr>`;
+}
+
+function stepper(o){
+  const done = STATUS_STEPS[o.status];
+  return `<div class="stepper">` + STEPS.map((s,i)=>{
+    const cls = i<done ? "step done" : i===done&&done<6 ? "step active" : "step";
+    const state = i<done ? "✓ Complete" : i===done&&done<6 ? STATUS_LABEL[o.status] : STEP_HINTS[i];
+    const who = i<done && o.stamps[i] ? `<div class="who">${o.stamps[i]}</div>` : "";
+    return `<div class="${cls}"><div class="mo">Step ${i+1} · ${STEP_WHEN[i]}</div>
+      <div style="font-size:10px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;margin-top:1px">${s}</div>
+      <div class="state">${state}</div>${who}</div>`;
+  }).join("") + `</div>`;
+}
+
+function laborRow(label,bud,gd,sc,strong){
+  const b = strong?'<strong>':'', e = strong?'</strong>':'';
+  return `<tr><td>${b}${label}${e}</td><td>${b}${usd(bud)}${e}</td>
+    <td>${b}${gd!=null?usd(gd):'<span class="muted">—</span>'}${e}</td>
+    <td>${b}${sc!=null?usd(sc):'<span class="muted">—</span>'}${e}</td>
+    <td>${gd!=null?deltaCell(gd,bud):'<span class="muted">—</span>'}</td>
+    <td>${(sc!=null&&gd!=null)?deltaCell(sc,gd):'<span class="muted">—</span>'}</td></tr>`;
+}
+
+function pctRow(label,budPct,tgtPct,schedPct){
+  return `<tr><td style="padding-left:24px">${label}</td><td class="muted">${pct(budPct)}</td>
+    <td class="muted">${tgtPct!=null?pct(tgtPct):"—"}</td><td class="muted">${schedPct!=null?pct(schedPct):"—"}</td>
+    <td class="muted">—</td><td class="muted">—</td></tr>`;
+}
+
+function scorecardGrid(o){
+  const gdT=(o.foh.gd!=null&&o.boh.gd!=null)?o.foh.gd+o.boh.gd:null;
+  const scT=(o.foh.sc!=null&&o.boh.sc!=null)?o.foh.sc+o.boh.sc:null;
+  const budT=o.foh.bud+o.boh.bud;
+  const rB=o.rev.bud, rT=o.rev.fcst; /* Scheduled revenue is set to Target */
+  return `<div style="overflow-x:auto;padding:0 4px 8px"><table>
+    <thead><tr><th class="l">Line</th><th>Budget</th><th>Target (Ross)</th><th>Scheduled (TeamWork)</th>
+      <th>Δ Target vs Budget</th><th>Δ Sched vs Target</th></tr></thead><tbody>
+    <tr><td>Revenue</td><td>${usd(rB)}</td><td>${usd(rT)}</td><td>${usd(rT)}<span class="sub">= Target</span></td>
+      <td>${deltaCell(rT,rB)}</td><td class="muted">—</td></tr>
+    ${laborRow("FOH Labor",o.foh.bud,o.foh.gd,o.foh.sc)}
+    ${pctRow("FOH Labor % of Revenue",o.foh.bud/rB,o.foh.gd!=null?o.foh.gd/rT:null,o.foh.sc!=null?o.foh.sc/rT:null)}
+    ${laborRow("BOH Labor",o.boh.bud,o.boh.gd,o.boh.sc)}
+    ${pctRow("BOH Labor % of Revenue",o.boh.bud/rB,o.boh.gd!=null?o.boh.gd/rT:null,o.boh.sc!=null?o.boh.sc/rT:null)}
+    ${laborRow("Total Labor",budT,gdT,scT,true)}
+    ${pctRow("Total Labor % of Revenue",budT/rB,gdT!=null?gdT/rT:null,scT!=null?scT/rT:null)}
+    </tbody></table></div>
+    <div class="note">Scheduled FOH/BOH labor $ are entered manually from TeamWork; scheduled revenue is held at the
+      approved Target. Labor % uses Budget revenue for the Budget column and Target revenue for the Target and Scheduled columns.</div>` +
+    (o.note?`<div class="sugg"><p class="muted">Guidance note (Ross): “${o.note}”</p></div>`:"");
+}
+
+function actionPanel(o){
+  const F = (lab,val,wide) => `<div class="field"><div class="flabel">${lab}</div>${wide?`<textarea>${val}</textarea>`:`<input value="${val}">`}</div>`;
+  switch(o.status){
+    case "NOT_STARTED": return `<div class="action"><div class="label">STEP 1 — GM + DIRECTORS · MON 10:00 AM</div>
+      <p>Set the weekly sales forecast in Helixo (day-of-week detail is what sizes FOH/BOH correctly), then submit
+      <strong>${usd(o.rev.fcst)}</strong> for approval.</p>
+      <div class="formrow"><button class="btn primary">Submit Forecast</button></div></div>`;
+    case "SUBMITTED": return `<div class="action"><div class="label">STEP 2 — ROSS · MON EOD*</div>
+      <p>Forecast of <strong>${usd(o.rev.fcst)}</strong> (${pct((o.rev.fcst-o.rev.bud)/o.rev.bud,true)} vs budget) set &amp; submitted.
+      Approving here returns the labor targets in one step. Helixo suggests FOH <strong>${usd(o.foh.hx)}</strong> ·
+      BOH <strong>${usd(o.boh.hx)}</strong>; the daily targets sheet below is generated automatically.</p>
+      <div class="formrow">${F("Target FOH $",usd(o.foh.hx).slice(1))}${F("Target BOH $",usd(o.boh.hx).slice(1))}${F("Notes","",true)}
+      <button class="btn primary">Approve Forecast &amp; Return Targets</button>${F("Rejection reason","")}<button class="btn">Reject ↩</button></div></div>`;
+    case "TARGETS_ISSUED": return `<div class="action"><div class="label">STEPS 3–4 — GM · TUE*</div>
+      <p>Targets returned: FOH <strong>${usd(o.foh.gd)}</strong> · BOH <strong>${usd(o.boh.gd)}</strong>
+      (${pct(o.foh.gd/o.rev.fcst)} / ${pct(o.boh.gd/o.rev.fcst)} of Target revenue)${o.note?` — “${o.note}”`:""}.
+      Build the schedule by person in TeamWork, then enter the scheduled dollars — submitting them is the approval request.</p>
+      <div class="formrow">${F("Scheduled FOH $",usd(o.foh.gd).slice(1))}${F("Scheduled BOH $",usd(o.boh.gd).slice(1))}${F("Notes","FOH 412 hrs / BOH 358 hrs, within target",true)}
+      <button class="btn primary">Request Approval</button></div></div>`;
+    case "APPROVAL_REQUESTED": { const over = (o.foh.sc+o.boh.sc)-(o.foh.gd+o.boh.gd);
+      return `<div class="action"><div class="label">STEP 5 — ROSS · WED*</div>
+      <p>Schedule built — approval requested: FOH <strong>${usd(o.foh.sc)}</strong> · BOH <strong>${usd(o.boh.sc)}</strong>
+      <span class="${over>0?'alert':'delta'}">${over>0?`(+${usd(over)} over target)`:'(✓ within target)'}</span></p>
+      <div class="formrow"><button class="btn primary">Schedule is Approved ✅</button>${F("Rejection reason","")}<button class="btn">Reject ↩</button></div></div>`; }
+    case "APPROVED": return `<div class="action"><div class="label">STEP 6 — GM · WED*</div>
+      <p>Approved by Ross. Publish the schedule in TeamWork so it's live to the team, then confirm here.</p>
+      <div class="formrow"><button class="btn primary">Mark Published in TeamWork</button></div></div>`;
+    default: return `<div class="action"><div class="label">PUBLISHED — LIVE TO THE TEAM</div>
+      <p>Schedule published in TeamWork. Track the week in In-Week Actuals below; the End-of-Week Variance
+      sheet closes the loop on Monday.</p></div>`;
+  }
+}
+
+function actualsSection(o){
+  const c = calc(o);
+  const behind = c.reqPerDay > c.fcstRemPerDay*1.005;
+  const sugg = suggestions(o,c);
+  const dayRows = DAY_LABELS.map((lab,i)=>{
+    if(i<3){ const d=o.actDays[i], tot=d.foh+d.boh;
+      return `<tr><td>${lab}</td><td>${usd(d.rev)}</td><td>${usd(o.fcstDays[i])}</td><td>${deltaCell(d.rev,o.fcstDays[i])}</td>
+        <td>${usd(d.foh)}</td><td class="muted">${pct(d.foh/d.rev)}</td>
+        <td>${usd(d.boh)}</td><td class="muted">${pct(d.boh/d.rev)}</td>
+        <td>${usd(tot)}</td><td>${pct(tot/d.rev)}</td></tr>`;}
+    return `<tr><td class="muted">${lab} · ahead</td><td class="muted">—</td><td class="muted">${usd(o.fcstDays[i])}</td>
+      <td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td>
+      <td class="muted">—</td><td class="muted">—</td><td class="muted">—</td></tr>`;
+  }).join("");
+  return `<section>
+    <div class="eyebrow">03 — IN-WEEK ACTUALS</div>
+    <h2>Moving <em>Target</em></h2>
+    <p class="hint">Week-to-date actuals against the approved forecast, with the pace required on the remaining days
+      and labor suggestions sized to the approved allowance. Orange means act.</p>
+    <div class="kpis">
+      <div class="kpi"><div class="label">WTD Revenue</div><div class="value">${usd(c.wtdAct)}</div>
+        <div class="deltachip">${c.wtdAct>=c.wtdFcst?"↗":"↘"} ${usd(c.wtdAct-c.wtdFcst,true)}</div>
+        <div class="sub">vs ${usd(c.wtdFcst)} Target-to-date · ${pct((c.wtdAct-c.wtdFcst)/c.wtdFcst,true)}</div></div>
+      <div class="kpi"><div class="label">WTD Labor</div><div class="value">${usd(c.wtdLabor)}</div>
+        <div class="sub">FOH ${usd(c.wtdFoh)} (${pct(c.wtdFoh/c.wtdAct)}) · BOH ${usd(c.wtdBoh)} (${pct(c.wtdBoh/c.wtdAct)}) · ${pct(c.wtdLaborPct)} total</div></div>
+      <div class="kpi"><div class="label">Required Pace</div><div class="value${behind?' alert':''}">${usd(c.reqPerDay)}/day</div>
+        <div class="sub">to land the ${usd(c.weekFcst)} week Target · Target calls for ${usd(c.fcstRemPerDay)}/day</div></div>
+      <div class="kpi"><div class="label">Labor Remaining</div>
+        <div class="value${c.laborRem!=null&&c.laborRem<0?' alert':''}">${c.laborRem!=null?usd(c.laborRem):"—"}</div>
+        <div class="sub">${c.gdTotal!=null?`of ${usd(c.gdTotal)} allowance · ≈ ${usd(Math.max(c.laborRem,0)/c.remDays)}/day for ${c.remDays} days`:"no approved guidance on file"}</div></div>
+    </div>
+    <div class="panel"><div class="panel-head"><div class="sub">MOVING TARGET</div><div class="ttl">Labor Suggestions</div></div>
+      <div class="sugg">${sugg.map(s=>`<p class="${s.a?'alert':''}">${s.t}</p>`).join("")}
+      ${c.gdTotal!=null?`<p class="muted">FOH remaining ${usd(c.fohRem)} of ${usd(o.foh.gd)} · BOH remaining ${usd(c.bohRem)} of ${usd(o.boh.gd)} · projected week labor ${pct((c.wtdLabor+Math.max(c.laborRem,0))/c.weekFcst)} vs ${pct(c.targetPct)} target.</p>`:""}</div></div>
+    <div class="panel"><div class="panel-head"><div class="sub">DAILY ACTUALS VS FORECAST</div><div class="ttl">Day by Day</div></div>
+      <div style="overflow-x:auto;padding:0 4px 8px"><table>
+      <thead><tr><th class="l">Day</th><th>Actual Rev</th><th>Target Rev</th><th>Δ</th>
+        <th>FOH $</th><th>FOH %</th><th>BOH $</th><th>BOH %</th><th>Total Labor</th><th>Total %</th></tr></thead><tbody>${dayRows}</tbody></table></div></div>
+  </section>`;
+}
+
+function varCell(v){
+  if(v==null||isNaN(v)) return '<span class="muted">—</span>';
+  const r = Math.round(v);
+  if(r===0) return '<span class="muted">$0</span>';
+  return `<span class="${r>0?'vbad':'vgood'}">${r>0?'+':'−'}$${Math.abs(r).toLocaleString("en-US")}</span>`;
+}
+
+function targetsTable(o){
+  if(o.foh.gd==null||o.boh.gd==null) return "";
+  const total = sum(o.fcstDays);
+  const rows = DAY_LABELS.map((lab,i)=>{
+    const f=o.fcstDays[i], share=total>0?f/total:1/7;
+    const tf=o.foh.gd*share, tb=o.boh.gd*share;
+    return `<tr><td>${lab}</td><td>${usd(f)}</td><td>${usd(tf)}</td><td>${usd(tb)}</td><td class="muted">${pct((tf+tb)/f)}</td></tr>`;
+  }).join("");
+  return `<div class="panel"><div class="panel-head"><div class="sub">SOP SHEET 2 · AUTO-SPREAD PRO-RATA TO THE DAILY FORECAST — ROSS ENTERS TWO TOTALS</div>
+    <div class="ttl">Labor Targets by Day</div></div>
+    <div style="overflow-x:auto;padding:0 4px 8px"><table>
+    <thead><tr><th>Day</th><th>Fcst Sales</th><th>Target FOH $</th><th>Target BOH $</th><th>Labor %</th></tr></thead>
+    <tbody>${rows}<tr style="font-weight:600"><td>Week Total</td><td>${usd(total)}</td><td>${usd(o.foh.gd)}</td><td>${usd(o.boh.gd)}</td><td>${pct((o.foh.gd+o.boh.gd)/total)}</td></tr></tbody>
+    </table></div></div>`;
+}
+
+function varianceSection(o){
+  const total = sum(o.fcstDays);
+  const groups = [["foh","FRONT OF HOUSE"],["boh","BACK OF HOUSE"]];
+  let body = "", grand = {bud:0, sch:null, act:null};
+  const hasSched = o.foh.sc!=null && o.boh.sc!=null;
+  for (const [g,label] of groups){
+    const G=o[g]; let sb=0, ss=hasSched?0:null, sa=0, anyAct=false;
+    body += `<tr class="grp"><td colspan="7">${label}</td></tr>`;
+    for (let i=0;i<7;i++){
+      const share = total>0?o.fcstDays[i]/total:1/7;
+      const bud = G.bud*share;
+      const sch = hasSched ? G.sc*share : null;
+      const act = i<3 ? o.actDays[i][g] : null;
+      sb+=bud; if(sch!=null) ss+=sch; if(act!=null){sa+=act; anyAct=true;}
+      body += `<tr><td>${DAY_LABELS[i]}</td><td>${usd(bud)}</td><td>${sch!=null?usd(sch):'<span class="muted">—</span>'}</td>
+        <td>${act!=null?`<strong>${usd(act)}</strong>`:'<span class="muted">—</span>'}</td>
+        <td>${sch!=null?varCell(sch-bud):'<span class="muted">—</span>'}</td>
+        <td>${(act!=null&&sch!=null)?varCell(act-sch):'<span class="muted">—</span>'}</td>
+        <td>${act!=null?varCell(act-bud):'<span class="muted">—</span>'}</td></tr>`;
+    }
+    const sav = anyAct?sa:null;
+    body += `<tr style="font-weight:600"><td>${g.toUpperCase()} Subtotal</td><td>${usd(sb)}</td>
+      <td>${ss!=null?usd(ss):'<span class="muted">—</span>'}</td><td>${sav!=null?usd(sav):'<span class="muted">—</span>'}</td>
+      <td>${ss!=null?varCell(ss-sb):'<span class="muted">—</span>'}</td>
+      <td>${(sav!=null&&ss!=null)?varCell(sav-ss):'<span class="muted">—</span>'}</td>
+      <td>${sav!=null?varCell(sav-sb):'<span class="muted">—</span>'}</td></tr>`;
+    grand.bud+=sb; if(ss!=null) grand.sch=(grand.sch??0)+ss; if(sav!=null) grand.act=(grand.act??0)+sav;
+  }
+  body += `<tr style="font-weight:600"><td>TOTAL LABOR</td><td>${usd(grand.bud)}</td>
+    <td>${grand.sch!=null?usd(grand.sch):'<span class="muted">—</span>'}</td><td>${grand.act!=null?usd(grand.act):'<span class="muted">—</span>'}</td>
+    <td>${grand.sch!=null?varCell(grand.sch-grand.bud):'<span class="muted">—</span>'}</td>
+    <td>${(grand.act!=null&&grand.sch!=null)?varCell(grand.act-grand.sch):'<span class="muted">—</span>'}</td>
+    <td>${grand.act!=null?varCell(grand.act-grand.bud):'<span class="muted">—</span>'}</td></tr>`;
+  return `<section>
+    <div class="eyebrow">04 — END-OF-WEEK VARIANCE</div>
+    <h2>Closing the <em>Loop</em></h2>
+    <p class="hint">Budget vs Scheduled vs Actual labor by day — green = under (favorable), red = over, per the SOP.
+    Closed out after the week ends; this is the Monday conversation. Days not yet played show no Actual.</p>
+    <div class="panel"><div style="overflow-x:auto;padding:0 4px 8px"><table>
+    <thead><tr><th>Day</th><th>Budget</th><th>Scheduled</th><th>Actual</th>
+    <th>Var Sched−Bud</th><th>Var Act−Sched</th><th>Var Act−Bud</th></tr></thead>
+    <tbody>${body}</tbody></table></div>
+    <div class="note">Budget from Helixo daily position budgets; Actual from Toast. Daily Scheduled is the approved
+    weekly TeamWork total pro-rated by forecast share until a TeamWork sync provides true daily schedule data.</div></div>
+  </section>`;
+}
+
+function renderAll(){
+  const fcstT = sum(OUTLETS.map(o=>o.rev.fcst)), budT = sum(OUTLETS.map(o=>o.rev.bud));
+  const finals = OUTLETS.filter(o=>o.status==="PUBLISHED").length;
+  const awaitDir = OUTLETS.filter(o=>["NOT_STARTED","DRAFT","TARGETS_ISSUED","APPROVED"].includes(o.status)).length;
+  const awaitRoss = OUTLETS.filter(o=>["SUBMITTED","APPROVAL_REQUESTED"].includes(o.status)).length;
+  document.getElementById("hero-lede").innerHTML =
+    `Portfolio forecast of <strong>${usd(fcstT)}</strong> against a <strong>${usd(budT)}</strong> budget
+     (<strong>${pct((fcstT-budT)/budT,true)}</strong>) — <strong>${finals} of ${OUTLETS.length}</strong> schedules published,
+     <strong>${awaitRoss} waiting on Ross</strong>.`;
+  document.getElementById("scope-chip").textContent = "ALL LOCATIONS";
+  document.getElementById("hero-title").innerHTML = `Weekly Labor <em>Management</em>`;
+  return `<section>
+    <div class="eyebrow">01 — SUBMISSION STATUS</div>
+    <h2>The Ticket <em>Rail</em></h2>
+    <p class="hint">FORECAST → TARGETS → SCHEDULE → REQUEST → APPROVE → PUBLISH, then End-of-Week Variance closes the
+      loop. Click a row — or use the VIEW filter — to open that outlet's plan, action panel, actuals, and variance sheet.
+      (*) placeholder timings per the SOP.</p>
+    <div class="kpis">
+      <div class="kpi"><div class="label">Portfolio Forecast</div><div class="value">${usd(fcstT)}</div>
+        <div class="deltachip">↗ ${usd(fcstT-budT,true)}</div><div class="sub">vs ${usd(budT)} budget · ${pct((fcstT-budT)/budT,true)}</div></div>
+      <div class="kpi"><div class="label">Published</div><div class="value">${finals}/${OUTLETS.length}</div>
+        <div class="sub">schedules live in TeamWork</div></div>
+      <div class="kpi"><div class="label">In GM Court</div><div class="value">${awaitDir}</div>
+        <div class="sub">forecast, schedule, or publish</div></div>
+      <div class="kpi"><div class="label">Awaiting Ross</div><div class="value${awaitRoss?' alert':''}">${awaitRoss}</div>
+        <div class="sub">forecast targets or schedule approval</div></div>
+    </div>
+    <div class="panel"><div style="overflow-x:auto"><table>
+      <thead><tr><th class="l">Location</th><th class="l">Stage</th><th>Rev Budget</th><th>Rev Target</th><th>Δ Bud</th>
+        <th>FOH Target</th><th>FOH Sched</th><th>FOH %</th><th>BOH Target</th><th>BOH Sched</th><th>BOH %</th><th>Total %</th></tr></thead>
+      <tbody>${OUTLETS.map(o=>pipelineRow(o,true)).join("")}</tbody></table></div>
+      <div class="note">* Helixo AI suggestion — not yet submitted. Rev Target = GM's approved Helixo submission. FOH/BOH Target =
+        Ross-provided allowable $. Sched = manually entered from TeamWork/Dolce. Labor % = Scheduled $ (or Target $ until schedules land)
+        over Target revenue. Deltas are blue both directions; orange marks rows waiting on action.</div>
+    </div></section>`;
+}
+
+function renderOutlet(o){
+  const fcstShown = o.status!=="NOT_STARTED";
+  document.getElementById("hero-lede").innerHTML =
+    `${o.name} is forecast at <strong>${usd(o.rev.fcst)}</strong> against a <strong>${usd(o.rev.bud)}</strong> budget
+     (<strong>${pct((o.rev.fcst-o.rev.bud)/o.rev.bud,true)}</strong>) — currently <strong>${STATUS_LABEL[o.status].toLowerCase()}</strong>.`;
+  document.getElementById("scope-chip").textContent = (o.name + " · " + o.city).toUpperCase();
+  document.getElementById("hero-title").innerHTML = `${o.name.split(" ")[0]} <em>${o.name.split(" ").slice(1).join(" ")||"Scorecard"}</em>`;
+  return `<section>
+    <div class="eyebrow">01 — SUBMISSION WORKFLOW</div>
+    <h2>Approval <em>Status</em></h2>
+    <p class="hint">${o.city} · ${STATUS_LABEL[o.status]} · week of Jun 8–14. <a href="#" onclick="setView('all');return false" style="color:var(--accent)">← Back to all locations</a></p>
+    ${stepper(o)}
+    <div class="panel">
+      <div class="panel-head"><div class="sub">${o.city.toUpperCase()} · ${STATUS_LABEL[o.status].toUpperCase()}</div>
+        <div class="ttl">Weekly Plan</div></div>
+      ${scorecardGrid(o)}
+      ${actionPanel(o)}
+    </div>
+    ${targetsTable(o)}
+    </section>
+    ${actualsSection(o)}
+    ${varianceSection(o)}`;
+}
+
+/* ============================ WIRING ============================ */
+function setView(key){
+  const sel = document.getElementById("outlet-filter");
+  if (sel.value !== key) sel.value = key;
+  const o = OUTLETS.find(x=>x.key===key);
+  document.getElementById("content").innerHTML = o ? renderOutlet(o) : renderAll();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+(function(){
+  const sel = document.getElementById("outlet-filter");
+  OUTLETS.forEach(o=>{ const op=document.createElement("option"); op.value=o.key; op.textContent=o.name+" — "+o.city; sel.appendChild(op); });
+  sel.addEventListener("change",e=>setView(e.target.value));
+  setView("all");
+  /* theme toggle */
+  const KEY='fsc-mock-theme', root=document.getElementById('report-root');
+  function apply(t){ root.classList.toggle('dark',t==='dark');
+    document.getElementById('theme-toggle').textContent = t==='dark'?'Light mode':'Dark mode'; }
+  let saved=null; try{saved=localStorage.getItem(KEY);}catch(e){}
+  apply(saved==='dark'?'dark':'light');
+  document.getElementById('theme-toggle').addEventListener('click',()=>{
+    const t = root.classList.contains('dark')?'light':'dark';
+    try{localStorage.setItem(KEY,t);}catch(e){} apply(t);
+  });
+})();
+</script>
+</body>
+</html>
