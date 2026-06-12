@@ -142,9 +142,9 @@ tr.grp td{background:var(--card-alt);font-family:'DM Mono',monospace;font-size:9
 /* ============================ SAMPLE DATA ============================ */
 /* week: Mon Jun 8 – Sun Jun 14; "today" = Thu Jun 11 -> 3 elapsed days  */
 const DAY_LABELS = ["Mon 6/8","Tue 6/9","Wed 6/10","Thu 6/11","Fri 6/12","Sat 6/13","Sun 6/14"];
-const STEPS = ["Forecast Set & Submitted","Labor Targets Returned","Schedule Built by Person","Request Approval","Schedule Approved","Schedule Published"];
+const STEPS = ["Forecast Set & Submitted","Labor Targets Returned","Schedule Drafted in TeamWork","Submitted for Approval","Schedule Approved","Schedule Published in TeamWork"];
 const STEP_HINTS = ["GM + Directors · Helixo","Ross · FOH/BOH $","GM · TeamWork","GM · scheduled $","Ross","GM · TeamWork"];
-const STEP_WHEN = ["Mon 10:00 AM","Mon EOD*","Tue*","Tue*","Wed*","Wed*"];
+const STEP_WHEN = ["Mon 10:00 AM","Mon EOD","Tue EOD","Tue EOD","Wed 10:00 AM","Thu 5:00 PM"];
 const STATUS_STEPS = {NOT_STARTED:0,DRAFT:0,SUBMITTED:1,TARGETS_ISSUED:2,APPROVAL_REQUESTED:4,APPROVED:5,PUBLISHED:6};
 const STATUS_LABEL = {NOT_STARTED:"Not started",DRAFT:"Forecast due",SUBMITTED:"Awaiting targets (Ross)",
   TARGETS_ISSUED:"Schedule due (TeamWork)",APPROVAL_REQUESTED:"Awaiting approval (Ross)",
@@ -153,13 +153,13 @@ const BADGE_CLS = {PUBLISHED:"badge done",APPROVED:"badge done",SUBMITTED:"badge
 
 const OUTLETS = [
   { key:"lowland", name:"Lowland", city:"Charleston", status:"PUBLISHED",
-    stamps:["GM+Dir · Mon 10:00a","Ross · Mon 3:50p","TeamWork · Tue","GM · Tue 4:45p","Ross · Wed 9:10a","GM · Wed 9:22a"],
+    stamps:["GM+Dir · Mon 10:00a","Ross · Mon EOD","TeamWork · Tue","GM · Tue 4:45p","Ross · Wed 9:10a","GM · Wed 9:22a"],
     rev:{bud:84000,fcst:91000}, foh:{bud:12600,hx:12740,gd:12000,sc:11850}, boh:{bud:9800,hx:9560,gd:9000,sc:9120},
     note:"Holding FOH under budget on higher revenue — patio coverage stays; trim Mon/Tue host hours. BOH gets one extra prep shift Friday for the Saturday push.",
     fcstDays:[10200,10800,11600,12400,15200,16800,14000],
     actDays:[{rev:9850,foh:1580,boh:1260},{rev:11240,foh:1610,boh:1280},{rev:11925,foh:1700,boh:1300}] },
   { key:"lesupreme", name:"Le Supreme", city:"Wilmington", status:"TARGETS_ISSUED",
-    stamps:["GM+Dir · Mon 10:00a","Ross · Mon 5:05p"],
+    stamps:["GM+Dir · Mon 10:00a","Ross · Mon EOD"],
     rev:{bud:112000,fcst:118000}, foh:{bud:16800,hx:17000,gd:16200,sc:null}, boh:{bud:13400,hx:13100,gd:12900,sc:null},
     note:"Brunch volume is carrying the week — protect weekend brunch FOH, pull one weekday lunch server.",
     fcstDays:[13200,14100,15400,16300,19800,21400,17800],
@@ -171,13 +171,13 @@ const OUTLETS = [
     fcstDays:[8100,8500,9200,9800,12400,13200,9600],
     actDays:[{rev:8310,foh:1420,boh:1150},{rev:8270,foh:1450,boh:1160},{rev:9150,foh:1495,boh:1185}] },
   { key:"kamper", name:"Kamper", city:"Detroit", status:"APPROVAL_REQUESTED",
-    stamps:["GM+Dir · Mon 10:00a","Ross · Mon 4:10p","Dolce · Tue","GM · Tue 5:02p"],
+    stamps:["GM+Dir · Mon 10:00a","Ross · Mon EOD","Dolce · Tue","GM · Tue 5:02p"],
     rev:{bud:61000,fcst:58500}, foh:{bud:9150,hx:8900,gd:8600,sc:8720}, boh:{bud:7300,hx:7050,gd:6900,sc:6840},
     note:"Soft midweek — schedule to the lower forecast, not budget. Keep Saturday line fully staffed.",
     fcstDays:[6700,6900,7400,8100,10300,11200,7900],
     actDays:[{rev:6540,foh:1180,boh:940},{rev:7110,foh:1210,boh:955},{rev:7260,foh:1240,boh:975}] },
   { key:"hirokisan", name:"Hiroki-San", city:"Detroit", status:"APPROVED",
-    stamps:["GM+Dir · Mon 10:00a","Ross · Mon 4:15p","TeamWork · Tue","GM · Tue 3:10p","Ross · Wed 9:05a"],
+    stamps:["GM+Dir · Mon 10:00a","Ross · Mon EOD","TeamWork · Tue","GM · Tue 3:10p","Ross · Wed 9:05a"],
     rev:{bud:47500,fcst:51200}, foh:{bud:7100,hx:7290,gd:7100,sc:7050}, boh:{bud:6200,hx:6030,gd:5900,sc:5950},
     note:"Omakase counter full Fri/Sat — protect those shifts, trim lunch support.",
     fcstDays:[5700,5900,6400,7100,9200,9900,7000],
@@ -331,24 +331,24 @@ function actionPanel(o){
       <p>Set the weekly sales forecast in Helixo (day-of-week detail is what sizes FOH/BOH correctly), then submit
       <strong>${usd(o.rev.fcst)}</strong> for approval.</p>
       <div class="formrow"><button class="btn primary">Submit Forecast</button></div></div>`;
-    case "SUBMITTED": return `<div class="action"><div class="label">STEP 2 — ROSS · MON EOD*</div>
+    case "SUBMITTED": return `<div class="action"><div class="label">STEP 2 — ROSS · MON EOD</div>
       <p>Forecast of <strong>${usd(o.rev.fcst)}</strong> (${pct((o.rev.fcst-o.rev.bud)/o.rev.bud,true)} vs budget) set &amp; submitted.
       Approving here returns the labor targets in one step. Helixo suggests FOH <strong>${usd(o.foh.hx)}</strong> ·
       BOH <strong>${usd(o.boh.hx)}</strong>; the daily targets sheet below is generated automatically.</p>
       <div class="formrow">${F("Target FOH $",usd(o.foh.hx).slice(1))}${F("Target BOH $",usd(o.boh.hx).slice(1))}${F("Notes","",true)}
       <button class="btn primary">Approve Forecast &amp; Return Targets</button>${F("Rejection reason","")}<button class="btn">Reject ↩</button></div></div>`;
-    case "TARGETS_ISSUED": return `<div class="action"><div class="label">STEPS 3–4 — GM · TUE*</div>
+    case "TARGETS_ISSUED": return `<div class="action"><div class="label">STEPS 3–4 — GM · TUE EOD</div>
       <p>Targets returned: FOH <strong>${usd(o.foh.gd)}</strong> · BOH <strong>${usd(o.boh.gd)}</strong>
       (${pct(o.foh.gd/o.rev.fcst)} / ${pct(o.boh.gd/o.rev.fcst)} of Target revenue)${o.note?` — “${o.note}”`:""}.
       Build the schedule by person in TeamWork, then enter the scheduled dollars — submitting them is the approval request.</p>
       <div class="formrow">${F("Scheduled FOH $",usd(o.foh.gd).slice(1))}${F("Scheduled BOH $",usd(o.boh.gd).slice(1))}${F("Notes","FOH 412 hrs / BOH 358 hrs, within target",true)}
-      <button class="btn primary">Request Approval</button></div></div>`;
+      <button class="btn primary">Submit for Approval</button></div></div>`;
     case "APPROVAL_REQUESTED": { const over = (o.foh.sc+o.boh.sc)-(o.foh.gd+o.boh.gd);
-      return `<div class="action"><div class="label">STEP 5 — ROSS · WED*</div>
+      return `<div class="action"><div class="label">STEP 5 — ROSS · WED 10:00 AM</div>
       <p>Schedule built — approval requested: FOH <strong>${usd(o.foh.sc)}</strong> · BOH <strong>${usd(o.boh.sc)}</strong>
       <span class="${over>0?'alert':'delta'}">${over>0?`(+${usd(over)} over target)`:'(✓ within target)'}</span></p>
       <div class="formrow"><button class="btn primary">Schedule is Approved ✅</button>${F("Rejection reason","")}<button class="btn">Reject ↩</button></div></div>`; }
-    case "APPROVED": return `<div class="action"><div class="label">STEP 6 — GM · WED*</div>
+    case "APPROVED": return `<div class="action"><div class="label">STEP 6 — GM · THU 5:00 PM</div>
       <p>Approved by Ross. Publish the schedule in TeamWork so it's live to the team, then confirm here.</p>
       <div class="formrow"><button class="btn primary">Mark Published in TeamWork</button></div></div>`;
     default: return `<div class="action"><div class="label">PUBLISHED — LIVE TO THE TEAM</div>
@@ -483,8 +483,7 @@ function renderAll(){
     <div class="eyebrow">01 — SUBMISSION STATUS</div>
     <h2>The Ticket <em>Rail</em></h2>
     <p class="hint">FORECAST → TARGETS → SCHEDULE → REQUEST → APPROVE → PUBLISH, then End-of-Week Variance closes the
-      loop. Click a row — or use the VIEW filter — to open that outlet's plan, action panel, actuals, and variance sheet.
-      (*) placeholder timings per the SOP.</p>
+      loop. Click a row — or use the VIEW filter — to open that outlet's plan, action panel, actuals, and variance sheet.</p>
     <div class="kpis">
       <div class="kpi"><div class="label">Portfolio Forecast</div><div class="value">${usd(fcstT)}</div>
         <div class="deltachip">↗ ${usd(fcstT-budT,true)}</div><div class="sub">vs ${usd(budT)} budget · ${pct((fcstT-budT)/budT,true)}</div></div>

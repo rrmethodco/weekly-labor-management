@@ -17,16 +17,16 @@ The weekly forecast → labor targets → schedule cycle, with two views:
 ## Workflow — the SOP ticket rail
 
 FORECAST → TARGETS → SCHEDULE → REQUEST → APPROVE → PUBLISH, then
-End-of-Week Variance closes the loop. (*) placeholder timings — confirm.
+End-of-Week Variance closes the loop.
 
 | Step | Owner | Output | When | Status after |
 |---|---|---|---|---|
 | 1. Forecast Set & Submitted | GM + Directors | Weekly sales forecast (Helixo) | Mon 10:00 AM | `SUBMITTED` |
-| 2. Labor Targets Returned | Ross | Target total FOH + BOH labor $ (doubles as forecast approval; daily targets auto-spread pro-rata to the forecast) | Mon EOD* | `TARGETS_ISSUED` |
-| 3. Schedule Built by Person | GM | Full schedule in TeamWork | Tue* | — |
-| 4. Request Approval | GM | Scheduled FOH/BOH $ entered (the approval request) | Tue* | `APPROVAL_REQUESTED` |
-| 5. Schedule Approved | Ross | Written approval (one click; Slack ping) | Wed* | `APPROVED` |
-| 6. Schedule Published | GM | Live schedule confirmed in TeamWork | Wed* | `PUBLISHED` |
+| 2. Labor Targets Returned | Ross | Target total FOH + BOH labor $ (doubles as forecast approval; daily targets auto-spread pro-rata to the forecast) | Mon EOD | `TARGETS_ISSUED` |
+| 3. Schedule Drafted in TeamWork | GM | Full schedule in TeamWork | Tue EOD | — |
+| 4. Submitted for Approval | GM | Scheduled FOH/BOH $ entered (the approval request) | Tue EOD | `APPROVAL_REQUESTED` |
+| 5. Schedule Approved | Ross | Written approval (one click; Slack ping) | Wed 10:00 AM | `APPROVED` |
+| 6. Schedule Published in TeamWork | GM | Live schedule confirmed in TeamWork | Thu 5:00 PM | `PUBLISHED` |
 
 Rejections at the forecast stage return the row to `DRAFT`; rejections at the
 schedule stage return to `TARGETS_ISSUED`. The reason and actor are recorded.
