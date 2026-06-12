@@ -197,6 +197,15 @@ const deltaCell = (val,base) => (val==null||base==null) ? '<span class="muted">�
   : `<span class="delta">${usd(val-base,true)} (${pct(base? (val-base)/base : null,true)})</span>`;
 const sum = a => a.reduce((x,y)=>x+y,0);
 
+/* Weekly Plan labor display: $ | % (of revenue) | Hrs (blended-rate estimate) */
+let LABOR_MODE = "$";
+const HOUR_RATE = {foh:26, boh:22}; /* illustrative blended $/hr until TeamWork provides true hours */
+const hrsCell = v => v==null ? "—" : Math.round(v).toLocaleString("en-US") + " hrs";
+const deltaPts = (val,base) => (val==null||base==null) ? '<span class="muted">—</span>'
+  : `<span class="delta">${val-base>0?"+":val-base<0?"−":""}${(Math.abs(val-base)*100).toFixed(1)} pts</span>`;
+const deltaHrs = (val,base) => (val==null||base==null) ? '<span class="muted">—</span>'
+  : `<span class="delta">${val-base>0?"+":val-base<0?"−":""}${Math.round(Math.abs(val-base)).toLocaleString("en-US")} hrs (${pct(base?(val-base)/base:null,true)})</span>`;
+
 function calc(o){
   const weekFcst = sum(o.fcstDays);
   const wtdAct = sum(o.actDays.map(d=>d.rev));
@@ -270,19 +279,14 @@ function stepper(o){
   }).join("") + `</div>`;
 }
 
-function laborRow(label,bud,gd,sc,strong){
+function laborRow(label,bud,gd,sc,strong,fmt,delta){
+  fmt = fmt || usd; delta = delta || deltaCell;
   const b = strong?'<strong>':'', e = strong?'</strong>':'';
-  return `<tr><td>${b}${label}${e}</td><td>${b}${usd(bud)}${e}</td>
-    <td>${b}${gd!=null?usd(gd):'<span class="muted">—</span>'}${e}</td>
-    <td>${b}${sc!=null?usd(sc):'<span class="muted">—</span>'}${e}</td>
-    <td>${gd!=null?deltaCell(gd,bud):'<span class="muted">—</span>'}</td>
-    <td>${(sc!=null&&gd!=null)?deltaCell(sc,gd):'<span class="muted">—</span>'}</td></tr>`;
-}
-
-function pctRow(label,budPct,tgtPct,schedPct){
-  return `<tr><td style="padding-left:24px">${label}</td><td class="muted">${pct(budPct)}</td>
-    <td class="muted">${tgtPct!=null?pct(tgtPct):"—"}</td><td class="muted">${schedPct!=null?pct(schedPct):"—"}</td>
-    <td class="muted">—</td><td class="muted">—</td></tr>`;
+  return `<tr><td>${b}${label}${e}</td><td>${b}${fmt(bud)}${e}</td>
+    <td>${b}${gd!=null?fmt(gd):'<span class="muted">—</span>'}${e}</td>
+    <td>${b}${sc!=null?fmt(sc):'<span class="muted">—</span>'}${e}</td>
+    <td>${gd!=null?delta(gd,bud):'<span class="muted">—</span>'}</td>
+    <td>${(sc!=null&&gd!=null)?delta(sc,gd):'<span class="muted">—</span>'}</td></tr>`;
 }
 
 function scorecardGrid(o){
@@ -290,20 +294,33 @@ function scorecardGrid(o){
   const scT=(o.foh.sc!=null&&o.boh.sc!=null)?o.foh.sc+o.boh.sc:null;
   const budT=o.foh.bud+o.boh.bud;
   const rB=o.rev.bud, rT=o.rev.fcst; /* Scheduled revenue is set to Target */
+  let rows, modeNote;
+  if (LABOR_MODE==="%"){
+    rows = laborRow("FOH Labor",o.foh.bud/rB,o.foh.gd!=null?o.foh.gd/rT:null,o.foh.sc!=null?o.foh.sc/rT:null,false,pct,deltaPts)
+         + laborRow("BOH Labor",o.boh.bud/rB,o.boh.gd!=null?o.boh.gd/rT:null,o.boh.sc!=null?o.boh.sc/rT:null,false,pct,deltaPts)
+         + laborRow("Total Labor",budT/rB,gdT!=null?gdT/rT:null,scT!=null?scT/rT:null,true,pct,deltaPts);
+    modeNote = " Labor % uses Budget revenue for the Budget column and Target revenue for the Target and Scheduled columns; deltas are percentage points.";
+  } else if (LABOR_MODE==="Hrs"){
+    const fh=v=>v==null?null:v/HOUR_RATE.foh, bh=v=>v==null?null:v/HOUR_RATE.boh;
+    rows = laborRow("FOH Labor",fh(o.foh.bud),fh(o.foh.gd),fh(o.foh.sc),false,hrsCell,deltaHrs)
+         + laborRow("BOH Labor",bh(o.boh.bud),bh(o.boh.gd),bh(o.boh.sc),false,hrsCell,deltaHrs)
+         + laborRow("Total Labor",fh(o.foh.bud)+bh(o.boh.bud),gdT!=null?fh(o.foh.gd)+bh(o.boh.gd):null,scT!=null?fh(o.foh.sc)+bh(o.boh.sc):null,true,hrsCell,deltaHrs);
+    modeNote = ` Hrs are illustrative — labor $ ÷ blended rate (FOH $${HOUR_RATE.foh}/hr · BOH $${HOUR_RATE.boh}/hr) — until a TeamWork sync provides true scheduled hours.`;
+  } else {
+    rows = laborRow("FOH Labor",o.foh.bud,o.foh.gd,o.foh.sc)
+         + laborRow("BOH Labor",o.boh.bud,o.boh.gd,o.boh.sc)
+         + laborRow("Total Labor",budT,gdT,scT,true);
+    modeNote = "";
+  }
   return `<div style="overflow-x:auto;padding:0 4px 8px"><table>
     <thead><tr><th class="l">Line</th><th>Budget</th><th>Target (Ross)</th><th>Scheduled (TeamWork)</th>
       <th>Δ Target vs Budget</th><th>Δ Sched vs Target</th></tr></thead><tbody>
     <tr><td>Revenue</td><td>${usd(rB)}</td><td>${usd(rT)}</td><td>${usd(rT)}<span class="sub">= Target</span></td>
       <td>${deltaCell(rT,rB)}</td><td class="muted">—</td></tr>
-    ${laborRow("FOH Labor",o.foh.bud,o.foh.gd,o.foh.sc)}
-    ${pctRow("FOH Labor % of Revenue",o.foh.bud/rB,o.foh.gd!=null?o.foh.gd/rT:null,o.foh.sc!=null?o.foh.sc/rT:null)}
-    ${laborRow("BOH Labor",o.boh.bud,o.boh.gd,o.boh.sc)}
-    ${pctRow("BOH Labor % of Revenue",o.boh.bud/rB,o.boh.gd!=null?o.boh.gd/rT:null,o.boh.sc!=null?o.boh.sc/rT:null)}
-    ${laborRow("Total Labor",budT,gdT,scT,true)}
-    ${pctRow("Total Labor % of Revenue",budT/rB,gdT!=null?gdT/rT:null,scT!=null?scT/rT:null)}
+    ${rows}
     </tbody></table></div>
     <div class="note">Scheduled FOH/BOH labor $ are entered manually from TeamWork; scheduled revenue is held at the
-      approved Target. Labor % uses Budget revenue for the Budget column and Target revenue for the Target and Scheduled columns.</div>` +
+      approved Target.${modeNote}</div>` +
     (o.note?`<div class="sugg"><p class="muted">Guidance note (Ross): “${o.note}”</p></div>`:"");
 }
 
@@ -501,8 +518,11 @@ function renderOutlet(o){
     <p class="hint">${o.city} · ${STATUS_LABEL[o.status]} · week of Jun 8–14. <a href="#" onclick="setView('all');return false" style="color:var(--accent)">← Back to all locations</a></p>
     ${stepper(o)}
     <div class="panel">
-      <div class="panel-head"><div class="sub">${o.city.toUpperCase()} · ${STATUS_LABEL[o.status].toUpperCase()}</div>
+      <div class="panel-head" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px">
+        <div><div class="sub">${o.city.toUpperCase()} · ${STATUS_LABEL[o.status].toUpperCase()}</div>
         <div class="ttl">Weekly Plan</div></div>
+        <div style="display:flex;gap:6px">${["$","%","Hrs"].map(x=>
+          `<button class="btn${x===LABOR_MODE?' primary':''}" type="button" onclick="setLaborMode('${x}')">${x}</button>`).join("")}</div></div>
       ${scorecardGrid(o)}
       ${actionPanel(o)}
     </div>
@@ -513,12 +533,16 @@ function renderOutlet(o){
 }
 
 /* ============================ WIRING ============================ */
-function setView(key){
+function setView(key,scroll){
   const sel = document.getElementById("outlet-filter");
   if (sel.value !== key) sel.value = key;
   const o = OUTLETS.find(x=>x.key===key);
   document.getElementById("content").innerHTML = o ? renderOutlet(o) : renderAll();
-  window.scrollTo({top:0,behavior:"smooth"});
+  if (scroll!==false) window.scrollTo({top:0,behavior:"smooth"});
+}
+function setLaborMode(m){
+  LABOR_MODE = m;
+  setView(document.getElementById("outlet-filter").value, false);
 }
 (function(){
   const sel = document.getElementById("outlet-filter");
