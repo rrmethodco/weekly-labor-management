@@ -23,8 +23,10 @@ Rejections: forecast stage → back to `DRAFT`; schedule stage → back to
 `TARGETS_ISSUED`, with reason + actor recorded.
 
 Three views: **Approval Workflow** (action queue with one-click approvals,
-weekly plan grid Budget · Target · Scheduled with FOH/BOH labor % of revenue,
-auto-generated daily targets sheet), **In-Week Actuals** (WTD vs target,
+weekly plan grid Budget · Target · Scheduled with FOH/BOH labor % of revenue;
+the auto-generated daily targets sheet is hidden for now — targets are weekly
+until the model learns daily patterns from actuals to project realistic daily
+thresholds), **In-Week Actuals** (WTD vs target,
 moving target, remaining-day plan, labor suggestions), **End-of-Week
 Variance** (Budget vs Scheduled vs Actual by day per FOH/BOH, green=under /
 red=over per the SOP).

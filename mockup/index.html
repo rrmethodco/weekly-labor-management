@@ -334,7 +334,8 @@ function actionPanel(o){
     case "SUBMITTED": return `<div class="action"><div class="label">STEP 2 — ROSS · MON EOD</div>
       <p>Forecast of <strong>${usd(o.rev.fcst)}</strong> (${pct((o.rev.fcst-o.rev.bud)/o.rev.bud,true)} vs budget) set &amp; submitted.
       Approving here returns the labor targets in one step. Helixo suggests FOH <strong>${usd(o.foh.hx)}</strong> ·
-      BOH <strong>${usd(o.boh.hx)}</strong>; the daily targets sheet below is generated automatically.</p>
+      BOH <strong>${usd(o.boh.hx)}</strong>. Targets are weekly for now — daily thresholds come later, once the
+      model picks up daily patterns from actuals.</p>
       <div class="formrow">${F("Target FOH $",usd(o.foh.hx).slice(1))}${F("Target BOH $",usd(o.boh.hx).slice(1))}${F("Notes","",true)}
       <button class="btn primary">Approve Forecast &amp; Return Targets</button>${F("Rejection reason","")}<button class="btn">Reject ↩</button></div></div>`;
     case "TARGETS_ISSUED": return `<div class="action"><div class="label">STEPS 3–4 — GM · TUE EOD</div>
@@ -525,7 +526,8 @@ function renderOutlet(o){
       ${scorecardGrid(o)}
       ${actionPanel(o)}
     </div>
-    ${targetsTable(o)}
+    <!-- targetsTable(o) hidden for now: targets are weekly only; daily thresholds return
+         once the model learns daily patterns from incoming actuals -->
     </section>
     ${actualsSection(o)}
     ${varianceSection(o)}`;
