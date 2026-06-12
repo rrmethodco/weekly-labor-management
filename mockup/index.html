@@ -95,6 +95,8 @@ td .sub{display:block;font-weight:400;font-size:10.5px;color:var(--text-3)}
 .report.dark .vgood{color:#34d399}.report.dark .vbad{color:#f87171}
 tr.grp td{background:var(--card-alt);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--text-2);padding:5px 12px}
+.plan-table table{width:auto;min-width:680px}
+.plan-table th,.plan-table td{padding:8px 22px 8px 12px}
 .stamp{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-top:30px}
 </style>
 </head>
@@ -158,7 +160,7 @@ const OUTLETS = [
     note:"Holding FOH under budget on higher revenue — patio coverage stays; trim Mon/Tue host hours. BOH gets one extra prep shift Friday for the Saturday push.",
     fcstDays:[10200,10800,11600,12400,15200,16800,14000],
     actDays:[{rev:9850,foh:1580,boh:1260},{rev:11240,foh:1610,boh:1280},{rev:11925,foh:1700,boh:1300}] },
-  { key:"lesupreme", name:"Le Supreme", city:"Wilmington", status:"TARGETS_ISSUED",
+  { key:"lesupreme", name:"Le Supreme", city:"Detroit", status:"TARGETS_ISSUED",
     stamps:["GM+Dir · Mon 10:00a","Ross · Mon EOD"],
     rev:{bud:112000,fcst:118000}, foh:{bud:16800,hx:17000,gd:16200,sc:null}, boh:{bud:13400,hx:13100,gd:12900,sc:null},
     note:"Brunch volume is carrying the week — protect weekend brunch FOH, pull one weekday lunch server.",
@@ -182,7 +184,7 @@ const OUTLETS = [
     note:"Omakase counter full Fri/Sat — protect those shifts, trim lunch support.",
     fcstDays:[5700,5900,6400,7100,9200,9900,7000],
     actDays:[{rev:5820,foh:980,boh:850},{rev:6090,foh:1010,boh:870},{rev:6310,foh:1030,boh:880}] },
-  { key:"barrotunda", name:"Bar Rotunda", city:"Wilmington", status:"NOT_STARTED",
+  { key:"barrotunda", name:"Bar Rotunda", city:"Detroit", status:"NOT_STARTED",
     stamps:[],
     rev:{bud:38000,fcst:38900}, foh:{bud:5700,hx:5830,gd:null,sc:null}, boh:{bud:4750,hx:4640,gd:null,sc:null},
     note:null,
@@ -312,7 +314,7 @@ function scorecardGrid(o){
          + laborRow("Total Labor",budT,gdT,scT,true);
     modeNote = "";
   }
-  return `<div style="overflow-x:auto;padding:0 4px 8px"><table>
+  return `<div class="plan-table" style="overflow-x:auto;padding:0 4px 8px"><table>
     <thead><tr><th class="l">Line</th><th>Budget</th><th>Target</th><th>Scheduled (TeamWork)</th>
       <th>Δ Target vs Budget</th><th>Δ Sched vs Target</th></tr></thead><tbody>
     <tr><td>Revenue</td><td>${usd(rB)}</td><td>${usd(rT)}</td><td>${usd(rT)}</td>
